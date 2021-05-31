@@ -1,4 +1,4 @@
-package com.epam.tc.news.service;
+package com.epam.tc.news.exception;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException() {

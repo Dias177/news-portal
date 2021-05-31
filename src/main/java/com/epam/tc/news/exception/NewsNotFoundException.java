@@ -1,4 +1,4 @@
-package com.epam.tc.news.service;
+package com.epam.tc.news.exception;
 
 public class NewsNotFoundException extends RuntimeException {
     public NewsNotFoundException() {
