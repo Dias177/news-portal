@@ -1,5 +1,6 @@
 package com.epam.tc.news.controller;
 
+import com.epam.tc.news.dto.UserDto;
 import com.epam.tc.news.entity.User;
 import com.epam.tc.news.service.UserService;
 import lombok.AccessLevel;
@@ -32,9 +33,17 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User u = userService.createUser(user);
-        return new ResponseEntity<>(u, HttpStatus.CREATED);
+    public ResponseEntity<User> createUser(@RequestBody UserDto user) {
+        User u = mapUserDtoToEntity(user);
+        u = userService.createUser(u);
+        return new ResponseEntity<>(u, u == null ? HttpStatus.CONFLICT : HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<User> createOrUpdateUser(@RequestBody UserDto user, @PathVariable Long id) {
+        User u = mapUserDtoToEntity(user);
+        u = userService.createOrUpdateUser(u, id);
+        return new ResponseEntity<>(u, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
@@ -42,4 +51,14 @@ public class UserController {
         userService.deleteUserById(id);
     }
 
+    private User mapUserDtoToEntity(UserDto user) {
+        var u = new User();
+        u.setEmail(user.getEmail());
+        u.setPassword(user.getPassword());
+        u.setFirstName(user.getFirstName());
+        u.setLastName(user.getLastName());
+        u.setBirthday(user.getBirthday());
+        u.setMobileNumber(user.getMobileNumber());
+        return u;
+    }
 }
