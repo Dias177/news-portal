@@ -21,7 +21,7 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUserById(long id) {
+    public User getUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
             return user.get();
@@ -40,29 +40,43 @@ public class UserService {
     }
 
     public User createUser(User user) {
-        Optional<User> u = userRepository.findById(user.getId());
-        User newUser;
-        if (u.isPresent()) {
-            newUser = u.get();
-            newUser.setEmail(user.getEmail());
-            newUser.setFirstName(user.getFirstName());
-            newUser.setLastName(user.getLastName());
-            newUser.setBirthday(user.getBirthday());
-            newUser.setPassword(user.getPassword());
-            newUser.setMobileNumber(user.getMobileNumber());
-            newUser = userRepository.save(newUser);
-        } else {
+        Long id = user.getId();
+        String email = user.getEmail();
+        User newUser = null;
+        if (!userExists(id, email)) {
             newUser = userRepository.save(user);
         }
         return newUser;
     }
 
-    public void deleteUserById(long id) {
+    public User createOrUpdateUser(User user, Long id) {
+        return userRepository.findById(id).map(u -> {
+            u.setEmail(user.getEmail());
+            u.setFirstName(user.getFirstName());
+            u.setLastName(user.getLastName());
+            u.setBirthday(user.getBirthday());
+            u.setMobileNumber(user.getMobileNumber());
+            u.setPassword(user.getPassword());
+            u.setNews(user.getNews());
+            return userRepository.save(u);
+        }).orElseGet(() -> {
+            user.setId(id);
+            return userRepository.save(user);
+        });
+    }
+
+    public void deleteUserById(Long id) {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
             userRepository.deleteById(id);
         } else {
             throw new UserNotFoundException("User not found id: " + id);
         }
+    }
+
+    public boolean userExists(Long id, String email) {
+        Optional<User> userWithId = userRepository.findById(id);
+        Optional<User> userWithEmail = userRepository.findByEmail(email);
+        return userWithId.isPresent() || userWithEmail.isPresent();
     }
 }
