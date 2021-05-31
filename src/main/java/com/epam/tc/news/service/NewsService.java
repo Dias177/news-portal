@@ -1,6 +1,7 @@
 package com.epam.tc.news.service;
 
 import com.epam.tc.news.entity.News;
+import com.epam.tc.news.exception.NewsNotFoundException;
 import com.epam.tc.news.repository.NewsRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,7 @@
 package com.epam.tc.news.service;
 
 import com.epam.tc.news.entity.User;
+import com.epam.tc.news.exception.UserNotFoundException;
 import com.epam.tc.news.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
