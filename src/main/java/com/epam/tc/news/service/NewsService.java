@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +46,7 @@ public class NewsService {
         String title = news.getTitle();
         News n = null;
         if (!newsExists(id, title)) {
+            news.setDate(new Date());
             n = newsRepository.save(news);
         }
         return n;
@@ -58,6 +60,7 @@ public class NewsService {
             return newsRepository.save(n);
         }).orElseGet(() -> {
             news.setId(id);
+            news.setDate(new Date());
             return newsRepository.save(news);
         });
     }
