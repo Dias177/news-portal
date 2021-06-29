@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,13 +42,16 @@ public class NewsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<News> createOrUpdateNews(@RequestBody NewsDto newsDto, @PathVariable("id") Long id) {
+    @PreAuthorize("#newsDto.getUser() == authentication.getName()")
+    public ResponseEntity<News> createOrUpdateNews(@RequestBody NewsDto newsDto, @PathVariable("id") Long id,
+                                                   Authentication authentication) {
         News news = mapNewsDtoToEntity(newsDto);
         news = newsService.createOrUpdateNews(news, id);
         return new ResponseEntity<>(news, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("#newsService.getNewsById(id).getUser() == authentication.getName()")
     public void deleteNewsById(@PathVariable("id") Long id) {
         newsService.deleteNewsById(id);
     }

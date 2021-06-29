@@ -1,6 +1,7 @@
 package com.epam.tc.news;
 
 import com.epam.tc.news.entity.News;
+import com.epam.tc.news.entity.Role;
 import com.epam.tc.news.entity.User;
 import com.epam.tc.news.exception.UserNotFoundException;
 import com.epam.tc.news.repository.UserRepository;
@@ -18,6 +19,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UserServiceTest {
+
+    private static final Long USER_ROLE_ID = 1L;
+    private static final String USER_ROLE_NAME = "USER";
 
     @InjectMocks
     private UserService userService;
@@ -72,8 +76,9 @@ public class UserServiceTest {
         String mobileNumber = "+77757654321";
         Date birthday = new Date();
         Set<News> news = new HashSet<>();
+        Set<Role> roles = Collections.singleton(new Role(USER_ROLE_ID, USER_ROLE_NAME));
 
-        User user = new User(id, email, password, firstName, lastName, mobileNumber, birthday, news);
+        User user = new User(id, email, password, firstName, lastName, mobileNumber, birthday, news, roles);
         when(userRepository.findById(id)).thenReturn(Optional.of(user));
 
         User foundUser = userService.getUserById(id);
@@ -108,8 +113,9 @@ public class UserServiceTest {
         String mobileNumber = "+77017654321";
         Date birthday = new Date();
         Set<News> news = new HashSet<>();
+        Set<Role> roles = Collections.singleton(new Role(USER_ROLE_ID, USER_ROLE_NAME));
 
-        User user = new User(id, email, password, firstName, lastName, mobileNumber, birthday, news);
+        User user = new User(id, email, password, firstName, lastName, mobileNumber, birthday, news, roles);
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
 
         User foundUser = userService.getUserByEmail(email);
