@@ -1,13 +1,16 @@
 package com.epam.tc.news.dto;
 
-import com.epam.tc.news.entity.User;
 import lombok.Data;
 
-@Data
-public class NewsDto {
+import java.util.Date;
 
+@Data
+public class NewsRequestDto {
+
+    private Long id;
     private String title;
+    private Date date;
     private String brief;
     private String content;
-    private User user;
+    private UserResponseDto user;
 }

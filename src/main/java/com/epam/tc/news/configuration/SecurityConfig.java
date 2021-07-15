@@ -2,7 +2,6 @@ package com.epam.tc.news.configuration;
 
 import com.epam.tc.news.service.UserService;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -20,18 +19,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String NEWS_ANT_PATTERNS = "/news/**";
 
     private UserService userService;
-
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder());
+        auth.userDetailsService(userService).passwordEncoder(bCryptPasswordEncoder);
     }
-
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

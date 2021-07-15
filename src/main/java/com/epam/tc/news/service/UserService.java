@@ -4,26 +4,22 @@ import com.epam.tc.news.entity.Role;
 import com.epam.tc.news.entity.User;
 import com.epam.tc.news.exception.UserNotFoundException;
 import com.epam.tc.news.repository.UserRepository;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class UserService implements UserDetailsService {
 
-    static Long ROLE_USER_ID = 1L;
-    static String ROLE_USER_NAME = "ROLE_USER";
+    private static final Long ROLE_USER_ID = 1L;
+    private static final String ROLE_USER_NAME = "ROLE_USER";
 
     UserRepository userRepository;
     BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -56,7 +52,7 @@ public class UserService implements UserDetailsService {
         User newUser = null;
         if (!userExists(id, email)) {
             user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-            user.setRoles(Collections.singleton(new Role(ROLE_USER_ID, ROLE_USER_NAME)));
+            user.setRole(new Role(ROLE_USER_ID, ROLE_USER_NAME));
             newUser = userRepository.save(user);
         }
         return newUser;
@@ -68,14 +64,13 @@ public class UserService implements UserDetailsService {
             u.setFirstName(user.getFirstName());
             u.setLastName(user.getLastName());
             u.setBirthday(user.getBirthday());
-            u.setRoles(Collections.singleton(new Role(ROLE_USER_ID, ROLE_USER_NAME)));
+            u.setRole(new Role(ROLE_USER_ID, ROLE_USER_NAME));
             u.setMobileNumber(user.getMobileNumber());
             u.setPassword(user.getPassword());
-            u.setNews(user.getNews());
             return userRepository.save(u);
         }).orElseGet(() -> {
             user.setId(id);
-            user.setRoles(Collections.singleton(new Role(ROLE_USER_ID, ROLE_USER_NAME)));
+            user.setRole(new Role(ROLE_USER_ID, ROLE_USER_NAME));
             return userRepository.save(user);
         });
     }

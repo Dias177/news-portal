@@ -19,8 +19,7 @@ public class News implements Serializable {
     @Column(name = "id", unique = true, nullable = false)
     private long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
+    @ManyToOne
     private User user;
 
     @Column(name = "title", unique = true, nullable = false, length = 100)
