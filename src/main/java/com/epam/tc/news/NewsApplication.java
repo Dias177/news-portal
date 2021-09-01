@@ -51,6 +51,12 @@ public class NewsApplication implements CommandLineRunner {
                 .lastName(lastName).mobileNumber(mobileNumber).birthday(birthday).role(role).build();
         userService.createUser(user);
 
+
+        var admin = User.builder().email("admin@news.com").password(password).firstName("Admin")
+                .lastName("Adminov").mobileNumber(mobileNumber).birthday(birthday)
+                .role(new Role(ROLE_ADMIN_ID, ROLE_ADMIN_NAME)).build();
+        userService.createUser(admin);
+
         var title = "Some title";
         var brief = "Some brief";
         var content = "Some content";
