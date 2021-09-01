@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+  app:
+    image: 'news-portal-server:latest'
+    build:
+      context: .
+    container_name: server
+    ports:
+    - "8080:8080"
+    - "5005:5005"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/newsdb
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=qwer123
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db
+    ports:
+    - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=qwer123
+      - POSTGRES_DB=newsdb
